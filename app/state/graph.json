@@ -1,0 +1,174 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "pos": [
+        0.0,
+        100.0
+      ],
+      "label": "Cut Table Plate",
+      "color": "#4C78A8",
+      "id": "Cut Table Plate"
+    },
+    {
+      "pos": [
+        0.0,
+        50.0
+      ],
+      "label": "Cut Base Frame",
+      "color": "#4C78A8",
+      "id": "Cut Base Frame"
+    },
+    {
+      "pos": [
+        0.0,
+        0.0
+      ],
+      "label": "Cut Feet",
+      "color": "#4C78A8",
+      "id": "Cut Feet"
+    },
+    {
+      "pos": [
+        100.0,
+        50.0
+      ],
+      "label": "Sand and Polish",
+      "color": "#4C78A8",
+      "id": "Sand and Polish"
+    },
+    {
+      "pos": [
+        200.0,
+        50.0
+      ],
+      "label": "Assembly",
+      "color": "#4C78A8",
+      "id": "Assembly"
+    },
+    {
+      "pos": [
+        0.0,
+        150.0
+      ],
+      "label": "Cut Marble Table Plate",
+      "color": "#4C78A8",
+      "id": "Cut Marble Table Plate"
+    },
+    {
+      "pos": [
+        100.0,
+        100.0
+      ],
+      "label": "Polish Marble",
+      "color": "#4C78A8",
+      "id": "Polish Marble"
+    },
+    {
+      "pos": [
+        150.0,
+        0.0
+      ],
+      "label": "Screws Supply",
+      "color": "#4C78A8",
+      "id": "Screws Supply"
+    },
+    {
+      "pos": [
+        150.0,
+        -50.0
+      ],
+      "label": "Bolts Supply",
+      "color": "#4C78A8",
+      "id": "Bolts Supply"
+    },
+    {
+      "pos": [
+        150.0,
+        -100.0
+      ],
+      "label": "Hardware Supply",
+      "color": "#4C78A8",
+      "id": "Hardware Supply"
+    },
+    {
+      "pos": [
+        100.0,
+        140.0
+      ],
+      "label": "Polish Marble 2",
+      "color": "#4C78A8",
+      "id": "Polish Marble 2"
+    }
+  ],
+  "edges": [
+    {
+      "label": "",
+      "color": "rgba(90,90,90,0.8)",
+      "source": "Cut Table Plate",
+      "target": "Sand and Polish"
+    },
+    {
+      "label": "",
+      "color": "rgba(90,90,90,0.8)",
+      "source": "Cut Base Frame",
+      "target": "Sand and Polish"
+    },
+    {
+      "label": "",
+      "color": "rgba(90,90,90,0.8)",
+      "source": "Cut Feet",
+      "target": "Sand and Polish"
+    },
+    {
+      "label": "",
+      "color": "rgba(90,90,90,0.8)",
+      "source": "Sand and Polish",
+      "target": "Assembly"
+    },
+    {
+      "label": "",
+      "color": "rgba(90,90,90,0.8)",
+      "source": "Cut Marble Table Plate",
+      "target": "Polish Marble"
+    },
+    {
+      "label": "",
+      "color": "rgba(90,90,90,0.8)",
+      "source": "Cut Marble Table Plate",
+      "target": "Polish Marble 2"
+    },
+    {
+      "label": "",
+      "color": "rgba(90,90,90,0.8)",
+      "source": "Polish Marble",
+      "target": "Assembly"
+    },
+    {
+      "label": "",
+      "color": "rgba(90,90,90,0.8)",
+      "source": "Screws Supply",
+      "target": "Assembly"
+    },
+    {
+      "label": "",
+      "color": "rgba(90,90,90,0.8)",
+      "source": "Bolts Supply",
+      "target": "Assembly"
+    },
+    {
+      "label": "",
+      "color": "rgba(90,90,90,0.8)",
+      "source": "Hardware Supply",
+      "target": "Assembly"
+    },
+    {
+      "label": "",
+      "color": "rgba(90,90,90,0.8)",
+      "source": "Polish Marble 2",
+      "target": "Assembly"
+    }
+  ]
+}

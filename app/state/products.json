@@ -1,0 +1,24 @@
+[
+  {
+    "label": "Unit One",
+    "route": [
+      "Cut Table Plate",
+      "Cut Base Frame",
+      "Cut Feet",
+      "Sand and Polish",
+      "Assembly"
+    ],
+    "color": "brown"
+  },
+  {
+    "label": "Unit Two",
+    "route": [
+      "Cut Marble Table Plate",
+      "Cut Base Frame",
+      "Cut Feet",
+      "Polish Marble",
+      "Assembly"
+    ],
+    "color": "pink"
+  }
+]
