@@ -1,16 +1,16 @@
 from __future__ import annotations
 
 """
-LangChain tools for manipulating the shared products stored in ``app/state/products.json``.
+LangChain tools for manipulating the shared product routes stored in ``app/state/products.json``.
 
-Each product is represented as a simple dict:
-  - ``label``: str, product name/identifier
+Each product route is represented as a simple dict:
+  - ``label``: str, product route name/identifier
   - ``route``: list[str], ordered list of station / node IDs
   - ``color``: str, CSS color for visualisation
 
 These helpers always:
   - Safely resolve the JSON path via ``app.state.product_state``
-  - Load the current products list from disk
+  - Load the current product routes list from disk
   - Apply the requested mutation
   - Persist the updated list back to ``products.json``
 """
@@ -24,13 +24,13 @@ from app.state.graph_state import load_graph
 
 
 @tool
-def add_product(label: str, route: List[str], color: str = "red") -> Dict[str, Any]:
+def add_product_route(label: str, route: List[str], color: str = "red") -> Dict[str, Any]:
     """
-    Add or update a product definition.
+    Add or update a product route definition.
 
     Args:
-        label: Name / identifier of the product.
-        route: Ordered list of station / node IDs this product flows through.
+        label: Name / identifier of the product route.
+        route: Ordered list of station / node IDs this product route flows through.
         color: CSS color used when animating this product.
 
     Returns:
@@ -39,7 +39,7 @@ def add_product(label: str, route: List[str], color: str = "red") -> Dict[str, A
           - {"success": False, "error": str, "missing_nodes": [...]} if some
             stations in the route do not exist in the current graph.
     """
-    print("Toolcall: add_product")
+    print("Toolcall: add_product_route")
 
     # Validate that all stations in the route exist as nodes in the graph.
     graph = load_graph()
@@ -77,30 +77,29 @@ def add_product(label: str, route: List[str], color: str = "red") -> Dict[str, A
 
 
 @tool
-def remove_product(label: str) -> None:
+def remove_product_route(label: str) -> None:
     """
-    Remove a product from the configuration by label.
+    Remove a product route from the configuration by label.
     """
-    print("Toolcall: remove_product")
+    print("Toolcall: remove_product_route")
     products = load_products()
     products = [p for p in products if p.get("label") != label]
     save_products(products)
 
 
 @tool
-def get_products() -> List[Dict[str, Any]]:
+def get_product_routes() -> List[Dict[str, Any]]:
     """
-    Return the full list of configured products.
+    Return the full list of configured product routes.
     """
-    print("Toolcall: get_products")
+    print("Toolcall: get_product_routes")
     return load_products()
 
 
 @tool
-def reset_products() -> None:
+def reset_product_routes() -> None:
     """
-    Reset / clear all configured products.
+    Reset / clear all configured product routes.
     """
-    print("Toolcall: reset_products")
+    print("Toolcall: reset_product_routes")
     save_products([])
-

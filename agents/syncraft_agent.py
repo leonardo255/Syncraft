@@ -1,19 +1,19 @@
 from agents.base import Agent
 
 from app.agents.syncraft_tools import add_node, remove_node, move_node, add_edge, remove_edge, reset_graph, get_graph_json
-from tools.syncraft.product_setup import add_product, remove_product, get_products
+from tools.syncraft.product_setup import add_product_route, remove_product_route, get_product_routes
 
 from langchain.messages import AIMessage, HumanMessage
-import os
+
 
 class SyncraftAgent(Agent):
     def __init__(self, model):
         sys_prompt = """
             You are an expert in production and manufacturing systems. Your role is to help the user model their
-            production process as a simulation graph made of stations and connections.
+            production process as a simulation graph made of stations, connections and product routes.
 
             Goals:
-            - Translate user descriptions into stations and connections.
+            - Translate user descriptions into stations, connections and product routes.
             - Explain and discuss the simulation with the user.
             - If a request is outside your capabilities, politely decline and explain.
 
@@ -25,6 +25,9 @@ class SyncraftAgent(Agent):
             - remove_edge(source, target)
             - reset_graph()
             - get_graph_json()
+            - add_product_route(label, route, color)
+            - remove_product_route(label)
+            - get_product_routes()
 
             General Workflow Rules:
             1. Do not rely on internal memory of the simulation graph - instead always inspect the real graph state using get_graph_json() before any actions.
@@ -60,20 +63,20 @@ class SyncraftAgent(Agent):
             version="1.0",
             sys_prompt=sys_prompt,
             tools=[add_node, 
-            remove_node, 
-            move_node, 
-            add_edge, 
-            remove_edge, 
-            reset_graph, 
-            get_graph_json,
-            add_product,
-            remove_product,
-            get_products
+                remove_node, 
+                move_node, 
+                add_edge, 
+                remove_edge, 
+                reset_graph, 
+                get_graph_json,
+                add_product_route,
+                remove_product_route,
+                get_product_routes
             ],
             model=model
         )
     
-    def go_to_work(self, user_instructions: str) -> str:
+    def go_to_work(self, user_instructions: str) -> str: # type: ignore
 
         user_msg = HumanMessage(content=user_instructions)
         result = self.invoke(user_msg=user_msg)
@@ -91,4 +94,4 @@ class SyncraftAgent(Agent):
                     final_msg = msg.content
                     break
 
-        return final_msg
+        return final_msg # type: ignore

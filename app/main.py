@@ -110,7 +110,7 @@ def main():
             st.experimental_rerun()
 
         # Products overview
-        st.subheader("Products")
+        st.subheader("Product Routes")
         products = st.session_state.get("products", []) or []
         if not products:
             st.caption("No products configured yet.")

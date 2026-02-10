@@ -26,7 +26,7 @@ class SimAgent(Agent):
             model=model
         )
     
-    def go_to_work(self, user_instructions: str) -> str:
+    def go_to_work(self, user_instructions: str) -> str: # type: ignore
 
         user_msg = HumanMessage(content=user_instructions)
         result = self.invoke(user_msg=user_msg)
@@ -44,4 +44,4 @@ class SimAgent(Agent):
                     final_msg = msg.content
                     break
 
-        return final_msg
+        return final_msg # type: ignore

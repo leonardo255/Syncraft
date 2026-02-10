@@ -1,24 +1,20 @@
 [
   {
-    "label": "Unit One",
+    "label": "Lamp",
     "route": [
-      "Cut Table Plate",
-      "Cut Base Frame",
-      "Cut Feet",
-      "Sand and Polish",
-      "Assembly"
+      "Assembly 2",
+      "Press",
+      "Shipping"
     ],
-    "color": "brown"
+    "color": "red"
   },
   {
-    "label": "Unit Two",
+    "label": "Table",
     "route": [
-      "Cut Marble Table Plate",
-      "Cut Base Frame",
-      "Cut Feet",
-      "Polish Marble",
-      "Assembly"
+      "Assembly",
+      "Press 2",
+      "Shipping"
     ],
-    "color": "pink"
+    "color": "blue"
   }
 ]
