@@ -1,5 +1,5 @@
-# SCOAA
-Supply Chain Operations Analytics using Agentic AI
+# Syncraft
+Agentic Production Simulation
 
 ## Todo
 - License Type
