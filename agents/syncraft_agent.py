@@ -1,6 +1,6 @@
 from agents.base import Agent
 
-from app.agents.syncraft_tools import add_node, remove_node, move_node, add_edge, remove_edge, reset_graph, get_graph_json
+from tools.syncraft.simulation_setup import add_node, remove_node, move_node, add_edge, remove_edge, reset_graph, get_graph_json
 from tools.syncraft.product_setup import add_product_route, remove_product_route, get_product_routes
 
 from langchain.messages import AIMessage, HumanMessage

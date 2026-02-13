@@ -10,10 +10,11 @@ These helpers always:
 - Persist the updated graph back to ``graph.json``
 """
 
+import random
 from langchain_core.tools import tool
 import networkx as nx
 
-from app.state.state import load_graph, save_graph, load_graph_json
+from app.state.graph_state import load_graph, save_graph, load_graph_json
 
 
 @tool
@@ -22,7 +23,7 @@ def add_node(label: str, x: float, y: float) -> bool:
     Add a node to the shared graph.
 
     A node represents a machine or a process in the production process and is
-    visualised in the Plotly canvas.
+    visualised in the Plotly canvas. If no process_time or capacity is given, default to 1.0.
 
     Args:
         label: Human-readable label (also used as the node id).
@@ -39,8 +40,9 @@ def add_node(label: str, x: float, y: float) -> bool:
     graph.add_node(
         label,
         pos=(x, y),
-        label=label,
         color="#4C78A8",
+        process_time=random.uniform(0.5, 2.0),  # Default random process time between 0.5 and 2.0
+        capacity=1,
     )
 
     save_graph(graph)
@@ -61,6 +63,25 @@ def remove_node(label: str) -> None:
         graph.remove_node(label)
         save_graph(graph)
 
+
+@tool
+def move_node(label: str, x_new: float, y_new: float):
+    """
+    Move a node to a new position, to change the layout without modifying connections.
+
+    Args:
+        label: Node id / label to move.
+        x_new: New X coordinate for the layout.
+        y_new: New Y coordinate for the layout.
+    """
+    print(f"Toolcall: Move node {label} to new pos {x_new}, {y_new}")
+    graph: nx.DiGraph = load_graph()
+
+    if graph.has_node(label):
+        # Update the stored position used by the Plotly UI.
+        graph.nodes[label]["pos"] = (x_new, y_new)
+
+    save_graph(graph)
 
 @tool
 def add_edge(src: str, dst: str) -> None:

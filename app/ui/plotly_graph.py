@@ -48,14 +48,34 @@ def build_graph_figure(
         ))
 
     # --- Static nodes ---
+    # Build hover text with node details
+    node_ids = list(pos.keys())
+    hover_texts = []
+    for node_id in node_ids:
+        node_data = graph.nodes[node_id]
+        process_time_raw = node_data.get("process_time")
+        capacity = node_data.get("capacity", "N/A")
+        
+        # Convert process_time from minutes (float) to mm:ss format
+        if process_time_raw is not None:
+            minutes = int(process_time_raw)
+            seconds = int((process_time_raw - minutes) * 60)
+            process_time = f"{minutes:02d}:{seconds:02d}"
+        else:
+            process_time = "N/A"
+        
+        hover_text = f"{node_id}<br>Process Time: {process_time}<br>Capacity: {capacity}"
+        hover_texts.append(hover_text)
+    
     fig.add_trace(go.Scatter(
         x=[p[0] for p in pos.values()],
         y=[p[1] for p in pos.values()],
         mode="markers+text",
-        text=list(pos.keys()),
+        text=node_ids,
         textposition="bottom center",
         marker=dict(size=30, color="#4C78A8"),
         hoverinfo="text",
+        hovertext=hover_texts,
         showlegend=False
     ))
 
