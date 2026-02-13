@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import uuid
+import time
 from typing import Dict, List, Tuple
 
 from agents.models import LLM_MODEL
@@ -8,8 +9,8 @@ from langchain.messages import AIMessage, HumanMessage
 
 from agents.syncraft_agent import SyncraftAgent
 
-from app.state.graph_state import reset_graph_state
-from app.state.product_state import reset_products
+from app.state.graph_state import reset_graph_state, load_graph
+from app.state.product_state import reset_products, load_products
 
 
 # Simple in-memory session store: session_id -> list of BaseMessage
@@ -39,12 +40,22 @@ def _get_history(session_id: str) -> List:
 
 
 def reset_session(session_id: str) -> None:
-    """Clear stored history for a session."""
+    """
+    Clear stored history and agent state for a session.
+    In Streamlit Cloud, ensures files are properly reset and reloaded.
+    """
     global _agent
 
     _session_store[session_id] = []
     reset_products()
     reset_graph_state()
+    
+    # Small delay to ensure file writes are flushed to disk on Streamlit Cloud
+    time.sleep(0.1)
+    
+    # Force reload to verify empty state was written
+    _ = load_graph()
+    _ = load_products()
 
     _agent = None 
     _agent = _get_agent()
