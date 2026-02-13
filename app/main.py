@@ -39,12 +39,11 @@ def main():
             st.session_state.messages = [
                 {"role": "assistant", "content": "Hi! Ask me to setup a production simulation."}
             ]
-    # Mirror global graph
-    if "graph" not in st.session_state:
-        st.session_state.graph = load_graph()
-
-    if "products" not in st.session_state:
-        st.session_state.products = load_products()
+    
+    # ALWAYS reload graph/products from disk on each render cycle to stay in sync
+    # This ensures that changes made by the agent (or reset button) are immediately visible
+    st.session_state.graph = load_graph()
+    st.session_state.products = load_products()
 
     # Title
     st.title("Syncraft")
@@ -85,12 +84,8 @@ def main():
         with st.chat_message("assistant", avatar=resolve_avatar(bot_avatar, "🤖")):
             st.markdown(response)
 
-
-        # Update UI adter agent calls
+        # Update UI after agent calls
         st.session_state.messages = updated_history
-        st.session_state.graph = load_graph()
-        st.session_state.products = load_products()
-        print(st.session_state.graph)
 
 
     # Sidebar for future controls
@@ -100,15 +95,14 @@ def main():
             st.image(str(logo_path))
         st.subheader("Session Controls")
         if st.button("Reset chat"):
+            # Reset all backend state (clears disk files and agent memory)
             reset_session(st.session_state.session_id)
-            # Clear all session state and reload from disk
+            # Create new session
             st.session_state.session_id = new_session_id()
             st.session_state.messages = [
                 {"role": "assistant", "content": "Hi! Ask me to setup a production simulation."}
             ]
-            # Force fresh load from disk (bypasses any caching)
-            st.session_state.graph = load_graph()
-            st.session_state.products = load_products()
+            # Trigger re-render - graph/products will reload from disk automatically
             st.rerun()
 
         # Products overview
