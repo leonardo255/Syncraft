@@ -39,12 +39,9 @@ def main():
             st.session_state.messages = [
                 {"role": "assistant", "content": "Hi! Ask me to setup a production simulation."}
             ]
-    # Mirror global graph
-    if "graph" not in st.session_state:
-        st.session_state.graph = load_graph()
-
-    if "products" not in st.session_state:
-        st.session_state.products = load_products()
+    # Mirror global graph/products on every run to stay in sync with shared JSON.
+    st.session_state.graph = load_graph()
+    st.session_state.products = load_products()
 
     # Title
     st.title("Syncraft")
