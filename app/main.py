@@ -39,11 +39,12 @@ def main():
             st.session_state.messages = [
                 {"role": "assistant", "content": "Hi! Ask me to setup a production simulation."}
             ]
-    
-    # ALWAYS reload graph/products from disk on each render cycle to stay in sync
-    # This ensures that changes made by the agent (or reset button) are immediately visible
-    st.session_state.graph = load_graph()
-    st.session_state.products = load_products()
+    # Mirror global graph
+    if "graph" not in st.session_state:
+        st.session_state.graph = load_graph()
+
+    if "products" not in st.session_state:
+        st.session_state.products = load_products()
 
     # Title
     st.title("Syncraft")
@@ -84,8 +85,12 @@ def main():
         with st.chat_message("assistant", avatar=resolve_avatar(bot_avatar, "🤖")):
             st.markdown(response)
 
-        # Update UI after agent calls
+
+        # Update UI adter agent calls
         st.session_state.messages = updated_history
+        st.session_state.graph = load_graph()
+        st.session_state.products = load_products()
+        print(st.session_state.graph)
 
 
     # Sidebar for future controls
@@ -95,15 +100,17 @@ def main():
             st.image(str(logo_path))
         st.subheader("Session Controls")
         if st.button("Reset chat"):
-            # Reset all backend state (clears disk files and agent memory)
             reset_session(st.session_state.session_id)
-            # Create new session
+            # Clear all session state variables
             st.session_state.session_id = new_session_id()
             st.session_state.messages = [
                 {"role": "assistant", "content": "Hi! Ask me to setup a production simulation."}
             ]
-            # Trigger re-render - graph/products will reload from disk automatically
-            st.rerun()
+            # Force fresh load from disk
+            st.session_state.graph = load_graph()
+            st.session_state.products = load_products()
+            # Trigger re-render by marking state as modified
+            st.session_state.reset_triggered = True
 
         # Products overview
         st.subheader("Product Routes")
