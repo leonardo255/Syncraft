@@ -14,7 +14,7 @@ import random
 from langchain_core.tools import tool
 import networkx as nx
 
-from app.state.graph_state import load_graph, save_graph, load_graph_json
+from app.state.graph_state import load_graph, save_graph, load_graph_json, reset_graph_state
 
 
 @tool
@@ -138,5 +138,4 @@ def reset_graph() -> None:
     Reset the shared graph to an empty directed graph.
     """
     print("Toolcall: Reset graph")
-    graph = nx.DiGraph()
-    save_graph(graph)
+    reset_graph_state()

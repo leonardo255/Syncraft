@@ -76,3 +76,14 @@ def save_graph(graph: nx.DiGraph) -> None:
 
     # Atomic replacement on POSIX (macOS, Linux).
     Path(tmp_name).replace(GRAPH_PATH)
+
+
+def reset_graph_state() -> None:
+    """
+    Reset the shared graph to an empty directed graph.
+
+    This is a convenience wrapper around save_graph for the common case of
+    clearing the graph entirely.
+    """
+    graph = nx.DiGraph()
+    save_graph(graph)

@@ -8,6 +8,9 @@ from langchain.messages import AIMessage, HumanMessage
 
 from agents.syncraft_agent import SyncraftAgent
 
+from app.state.graph_state import reset_graph_state
+from app.state.product_state import reset_products
+
 
 # Simple in-memory session store: session_id -> list of BaseMessage
 _session_store: Dict[str, List] = {}
@@ -37,7 +40,15 @@ def _get_history(session_id: str) -> List:
 
 def reset_session(session_id: str) -> None:
     """Clear stored history for a session."""
-    _session_store.pop(session_id, None)
+    global _agent
+
+    _session_store[session_id] = []
+    reset_products()
+    reset_graph_state()
+
+    _agent = None 
+    _agent = _get_agent()
+
 
 
 def get_display_history(session_id: str) -> List[dict]:

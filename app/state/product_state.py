@@ -59,3 +59,10 @@ def save_products(products: List[Dict[str, Any]]) -> None:
 
     Path(tmp_name).replace(PRODUCTS_PATH)
 
+
+def reset_products() -> None:
+    """
+    Clear all products by saving an empty list to ``products.json``.
+    """
+    save_products([])
+

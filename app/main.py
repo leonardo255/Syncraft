@@ -7,8 +7,6 @@ if str(root) not in sys.path:
 
 
 import streamlit as st
-import numpy as np
-import time
 from app.state.graph_state import load_graph
 from app.state.product_state import load_products
 from ui.plotly_graph import build_graph_figure
@@ -104,10 +102,13 @@ def main():
         if st.button("Reset chat"):
             reset_session(st.session_state.session_id)
             st.session_state.session_id = new_session_id()
+            st.session_state.graph = load_graph()
+            st.session_state.products = load_products()
             st.session_state.messages = [
                 {"role": "assistant", "content": "Hi! Ask me to setup a production simulation."}
             ]
-            st.experimental_rerun()
+            # Ensure UI reflects the cleared graph/products without a manual reload.
+            st.rerun()
 
         # Products overview
         st.subheader("Product Routes")

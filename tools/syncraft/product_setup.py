@@ -19,7 +19,7 @@ from typing import Any, Dict, List
 
 from langchain_core.tools import tool
 
-from app.state.product_state import load_products, save_products
+from app.state.product_state import load_products, save_products, reset_products
 from app.state.graph_state import load_graph
 
 
@@ -102,4 +102,4 @@ def reset_product_routes() -> None:
     Reset / clear all configured product routes.
     """
     print("Toolcall: reset_product_routes")
-    save_products([])
+    reset_products()
