@@ -1,0 +1,2 @@
+- Update Anthropic endpoint to OpenRouter
+- Add .env and .env.example with new openrouter key
