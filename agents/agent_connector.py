@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import traceback
 import uuid
 import time
 from typing import Dict, List, Tuple
 
-from agents.models import LLM_MODEL
+from agents.models import ModelUnavailable, get_model
 from langchain.messages import AIMessage, HumanMessage
 
 from agents.syncraft_agent import SyncraftAgent
@@ -22,8 +23,37 @@ _agent: SyncraftAgent | None = None
 def _get_model():
     global _model
     if _model is None:
-        _model = LLM_MODEL
+        _model = get_model()  # raises ModelUnavailable if not configured
     return _model
+
+
+def _status_code(exc: BaseException) -> int | None:
+    """HTTP status of a provider error, looking through wrapped exceptions."""
+    seen = set()
+    while exc is not None and id(exc) not in seen:
+        seen.add(id(exc))
+        code = getattr(exc, "status_code", None)
+        if code is None:
+            code = getattr(getattr(exc, "response", None), "status_code", None)
+        if isinstance(code, int):
+            return code
+        exc = exc.__cause__ or exc.__context__
+    return None
+
+
+def _friendly_error(exc: BaseException) -> str:
+    """A short message for the chat; details go to the server log."""
+    if isinstance(exc, ModelUnavailable):
+        return f"⚠️ {exc} Please contact the Syncraft team."
+    code = _status_code(exc)
+    name = type(exc).__name__
+    if code in (401, 403) or "Authentication" in name or "PermissionDenied" in name:
+        return "⚠️ The demo is not set up to answer right now. Please contact the Syncraft team."
+    if code == 429 or "RateLimit" in name:
+        return "⚠️ The demo is busy right now. Please try again in a minute."
+    if "Timeout" in name or "Connection" in name:
+        return "⚠️ I couldn't answer just now. Please try again in a moment."
+    return "⚠️ Something went wrong while answering. Please try again."
 
 
 def _get_agent() -> SyncraftAgent:
@@ -57,8 +87,9 @@ def reset_session(session_id: str) -> None:
     _ = load_graph()
     _ = load_products()
 
-    _agent = None 
-    _agent = _get_agent()
+    # The agent is rebuilt lazily on the next message, so resetting also
+    # works when no model is configured.
+    _agent = None
 
 
 
@@ -81,11 +112,17 @@ def send_message(session_id: str, user_message: str) -> Tuple[str, List[dict]]:
     Returns (assistant_reply, display_history) where display_history is a list of dicts
     with role/content for UI rendering.
     """
-    agent = _get_agent()
     history = _get_history(session_id)
 
-    # Directly send the raw user string to the agent
-    response_text = agent.go_to_work(user_instructions=user_message)
+    try:
+        agent = _get_agent()
+        # Directly send the raw user string to the agent
+        response_text = agent.go_to_work(user_instructions=user_message)
+    except Exception as exc:
+        # Never crash the page: log the details, answer with a short message.
+        print(f"[syncraft] request failed: {exc!r}", flush=True)
+        traceback.print_exc()
+        response_text = _friendly_error(exc)
     assistant_msg = AIMessage(content=response_text)
 
     # Persist turn

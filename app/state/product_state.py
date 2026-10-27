@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 import json
 import tempfile
 from typing import Any, Dict, List
 
 
-_STATE_DIR = Path(__file__).resolve().parent
+# Where the shared state lives. Locally: next to this file (default).
+# In the container SYNCRAFT_STATE_DIR=/data, the backed-up data directory.
+_STATE_DIR = Path(os.getenv("SYNCRAFT_STATE_DIR") or Path(__file__).resolve().parent)
 PRODUCTS_PATH = _STATE_DIR / "products.json"
 
 

@@ -1,0 +1,18 @@
+# How the Syncraft demo runs - on the server and locally:
+#   docker compose up --build   ->  http://127.0.0.1:8502/syncraft/demo/
+# The static page in site/ needs no container; nginx serves it straight from
+# the checkout. Contract: Digital-Lab-SDU README, "Adding an app".
+services:
+  demo:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8502:8000"   # 8502 is registered for syncraft in apps.yml
+    env_file:
+      - path: ${ENV_FILE:-.env}
+        required: false
+    environment:
+      # The URL prefix, without leading/trailing slash (Streamlit's baseUrlPath).
+      STREAMLIT_SERVER_BASE_URL_PATH: syncraft/demo
+    volumes:
+      - ${DATA_DIR:-./data}:/data
